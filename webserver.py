@@ -9,20 +9,32 @@ def handleRequest(connSock):
 
    requested_file = request.decode().split("\n")[0].split(" ")[1][1:]
    # print("Requested File",requested_file)
+
    http_response = ""
    if os.path.isfile(os.path.join(os.getcwd(),requested_file)): # if file exists
-      with open(os.path.join(os.getcwd(),requested_file),"rb") as html_file:
-         html_content = html_file.read()
-         # print(html_content)
-         # add header lines
-         http_response += "HTTP/1.1 200 OK\r\n" # status line
-         http_response += "Content-Type: text/html\r\n" # headers
-         http_response += "Content-Length: {}\r\n".format(len(html_content))
-         http_response += "\r\n"
-         connSock.sendall(http_response.encode())
 
-         # send file content
-         connSock.sendall(html_content)
+      with open(os.path.join(os.getcwd(),requested_file),"rb") as f:
+         content = f.read()
+
+      content_type = "text/html" # default to html
+      # get file extension
+      file_extension = requested_file.split(".")[-1].lower()
+      if file_extension == "jpg" or file_extension == "jpeg":
+         content_type = "image/jpeg"
+      elif file_extension == "png":
+         content_type = "image/png"
+      elif file_extension == "txt":
+         content_type = "text/plain"
+
+      # add header lines
+      http_response += "HTTP/1.1 200 OK\r\n" # status line
+      http_response += f"Content-Type: {content_type}\r\n" # headers
+      http_response += "Content-Length: {}\r\n".format(len(content))
+      http_response += "\r\n"
+      connSock.sendall(http_response.encode())
+
+      # send file content
+      connSock.sendall(content)
    else:
       html_content = b"<h1>404 Error Not Found</h1>"
       http_response += "HTTP/1.1 404 Not Found\r\n" # status line
