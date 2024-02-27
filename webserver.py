@@ -1,3 +1,9 @@
+# CSE 310 Spring 2024
+# Programming Assignment 1
+# Part A - Web Server
+# Ryan Chen
+# SBU_ID: 113200236
+
 from socket import *
 import os
 serverPort = 6789
@@ -48,7 +54,7 @@ def handleRequest(connSock):
 
 def main():
    serverSocket = socket(AF_INET,SOCK_STREAM)
-   serverSocket.bind(('',serverPort))
+   serverSocket.bind(('localhost',serverPort))
    serverSocket.listen(1)
    print ("The server is ready to receive")
    while True:
