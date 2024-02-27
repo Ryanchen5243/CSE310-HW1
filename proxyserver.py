@@ -6,7 +6,7 @@
 
 from socket import *
 PROXY_PORT = 8888
-BUFFER_SIZE = 10
+BUFFER_SIZE = 4096
 HOST = 'localhost'
 
 cache = {}
@@ -27,7 +27,9 @@ def handleClient(conn_sock):
     # check modification date, fetch if new, otherwise retrieve resource from cache
     print("Requested url {} was found in cache...now retrieving...".format(request_url))
     # logic for fetching from cache
+    cached_response = cache[request_url]
 
+    conn_sock.sendall(cached_response.encode())
 
   else:
     # fetch resource from server using GET request
@@ -37,7 +39,7 @@ def handleClient(conn_sock):
       # print("the domain name is ",domain_name)
       if (domain_name == ''):
         domain_name = "www.google.com" # default case
-      # print("the domain name is ",domain_name)
+      print("the domain name is ",domain_name)
 
       # retrieve resource path
       resource_path = ""
@@ -46,7 +48,7 @@ def handleClient(conn_sock):
           resource_path += "/" + path_el
       else:
         resource_path = "/"
-      # print("the retreived resource path is ", resource_path)
+      print("the retreived resource path is ", resource_path)
       # done domain name and resource path
 
       # send GET request to origin server
