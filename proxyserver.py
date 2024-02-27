@@ -80,22 +80,15 @@ def handleClient(conn_sock):
 
     except gaierror as e:
       # bad dns lookup (invalid domain name)
-      pass
-
-
-  # http_response = ""
-  # response_content = ""
-  # content_type = "text/html" # default to html
-
-  # # add header lines
-  # http_response += "HTTP/1.1 200 OK\r\n" # status line
-  # http_response += f"Content-Type: {content_type}\r\n" # headers
-  # http_response += "Content-Length: {}\r\n".format(len(response_content))
-  # http_response += "\r\n"
-  # conn_sock.sendall(http_response.encode())
-  # # # send file content
-  # conn_sock.sendall(response_content.encode())
-
+      http_response = ""
+      html_content = b"<h1> 502 Bad Gateway - Bad DNS lookup</h1>"
+      http_response += "HTTP/1.1 502 Bad Gateway\r\n" # status line
+      http_response += "Content-Type: text/html\r\n" # headers
+      http_response += "Content-Length: {}\r\n".format(len(html_content))
+      http_response += "\r\n"
+      
+      conn_sock.sendall(http_response.encode())
+      conn_sock.sendall(html_content)
 
 def main():
   proxySocket = socket(AF_INET,SOCK_STREAM)
