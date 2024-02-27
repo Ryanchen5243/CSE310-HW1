@@ -28,3 +28,5 @@ For completeness sake, please check out the following urls
 - http://localhost:6789/bamboozle.html
 
 Part B - Web Proxy
+The web proxy serves as a simple web server that includes a cache system and works with basic web pages.
+The relevant file to test this is proxyserver.py
